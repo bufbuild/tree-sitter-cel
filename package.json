@@ -1,0 +1,34 @@
+{
+  "name": "tree-sitter-cel",
+  "version": "0.0.1",
+  "description": "Tree Sitter Parser for CEL",
+  "main": "bindings/node",
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "npm run generate && npx tree-sitter test",
+    "test-windows": "npx tree-sitter test",
+    "generate": "npx tree-sitter generate",
+    "lint": "eslint grammar.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nan": "^2.17.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "tree-sitter-cli": "^0.20.8"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "semi": false,
+    "useTabs": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  }
+}
