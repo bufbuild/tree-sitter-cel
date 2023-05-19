@@ -1,0 +1,43 @@
+==================
+compile-time check for objects inside list literal
+==================
+ext.TestAllTypes{PbVal: test.TestAllTypes{}}
+---
+    (expr
+      (struct_expression
+        (select_expression
+          (identifier)
+          (identifier))
+        (struct_fields
+          (field_initializer
+            (identifier)
+            (struct_expression
+              (select_expression
+                (identifier)
+                (identifier)))))))
+==================
+int select
+==================
+1.a
+---
+    (expr
+      (select_expression
+        (int_literal
+          (decimal_literal))
+        (identifier)))
+==================
+in
+==================
+1 in [1, 2, 3]
+---
+    (expr
+      (binary_expression
+        (int_literal
+          (decimal_literal))
+        (list_expression
+          (int_literal
+            (decimal_literal))
+          (int_literal
+            (decimal_literal))
+          (int_literal
+            (decimal_literal)))))
