@@ -1,6 +1,13 @@
 ==================
-Zero
+Operator precedence
 ==================
-0
+1+2*3+4
 ---
-(expr 0)
+    (expr
+      (binary_expression
+        (binary_expression
+          (int_literal)
+          (binary_expression
+            (int_literal)
+            (int_literal)))
+        (int_literal)))
