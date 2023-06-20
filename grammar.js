@@ -1,27 +1,25 @@
 const
   PREC = {
-    primary: 7,
-    unary: 6,
-    multiplicative: 5,
-    additive: 4,
-    comparative: 3,
-    and: 2,
-    or: 1,
-    composite_literal: -1,
+    primary: 9,
+    member: 8,
+    unary: 7,
+    multiplicative: 6,
+    additive: 5,
+    comparative: 4,
+    and: 3,
+    or: 2,
+    conditional: 1,
   },
 
   multiplicative_operators = ['*', '/', '%'],
   additive_operators = ['+', '-'],
   comparative_operators = ['==', '!=', '<', '<=', '>', '>='],
-  assignment_operators = multiplicative_operators.concat(additive_operators).map(operator => operator + '=').concat('='),
 
   unicodeLetter = /\p{L}/,
   unicodeDigit = /[0-9]/,
-  unicodeChar = /./,
-  unicodeValue = unicodeChar,
   letter = choice(unicodeLetter, '_'),
 
-  newline = '\n',
+  newline = /\r?\n/,
   terminator = choice(newline, ';'),
 
   hexDigit = /[0-9a-fA-F]/,
@@ -65,6 +63,7 @@ module.exports = grammar({
     // TODO: add the actual grammar rules
     expr: $ => $._expression,
     _expression: $ => choice(
+      $.conditional_expression,
       $.unary_expression,
       $.binary_expression,
       $.identifier,
@@ -81,6 +80,14 @@ module.exports = grammar({
       $._expression,
       ')'
     ),
+
+    conditional_expression: $ => prec.right(PREC.conditional, seq(
+      field('condition', $._expression),
+      '?',
+      field('consequence', $._expression),
+      ':',
+      field('alternative', $._expression)
+    )),
 
     unary_expression: $ => prec(PREC.unary, seq(
       field('operator', choice('+', '-', '!')),

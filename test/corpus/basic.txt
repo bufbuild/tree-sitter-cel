@@ -11,3 +11,18 @@ Operator precedence
             (int_literal)
             (int_literal)))
         (int_literal)))
+
+==================
+Conditional
+==================
+a ? b || d : c || e
+---
+    (expr
+      (conditional_expression
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier))
+        (binary_expression
+          (identifier)
+          (identifier))))
