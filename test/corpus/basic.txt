@@ -104,3 +104,17 @@ a[1] + b.c[2.0] + d[1][2] + e[1].f(1, 2)
           (arguments
             (int_literal)
             (int_literal)))))
+
+==================
+Uint literal
+==================
+1u + 0x1u + 0b1u + 0o1u
+---
+   (expr
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (uint_literal)
+            (uint_literal))
+          (uint_literal))
+        (uint_literal)))

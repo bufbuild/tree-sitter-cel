@@ -60,6 +60,10 @@
           "named": true
         },
         {
+          "type": "uint_literal",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -124,6 +128,10 @@
           },
           {
             "type": "true",
+            "named": true
+          },
+          {
+            "type": "uint_literal",
             "named": true
           },
           {
@@ -247,6 +255,10 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -341,6 +353,10 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -403,6 +419,10 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -462,6 +482,10 @@
           },
           {
             "type": "true",
+            "named": true
+          },
+          {
+            "type": "uint_literal",
             "named": true
           },
           {
@@ -533,6 +557,10 @@
           "named": true
         },
         {
+          "type": "uint_literal",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -600,6 +628,10 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -662,12 +694,21 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
         ]
       }
     }
+  },
+  {
+    "type": "int_literal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "member_call_expression",
@@ -750,6 +791,10 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
@@ -815,6 +860,10 @@
         },
         {
           "type": "true",
+          "named": true
+        },
+        {
+          "type": "uint_literal",
           "named": true
         },
         {
@@ -895,12 +944,21 @@
             "named": true
           },
           {
+            "type": "uint_literal",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           }
         ]
       }
     }
+  },
+  {
+    "type": "uint_literal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "unary_expression",
@@ -960,6 +1018,10 @@
           },
           {
             "type": "true",
+            "named": true
+          },
+          {
+            "type": "uint_literal",
             "named": true
           },
           {
@@ -1085,16 +1147,16 @@
     "named": true
   },
   {
-    "type": "int_literal",
-    "named": true
-  },
-  {
     "type": "null",
     "named": true
   },
   {
     "type": "true",
     "named": true
+  },
+  {
+    "type": "u",
+    "named": false
   },
   {
     "type": "||",

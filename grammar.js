@@ -71,6 +71,7 @@ module.exports = grammar({
       $.unary_expression,
       $.binary_expression,
       $.identifier,
+      $.uint_literal,
       $.int_literal,
       $.float_literal,
       $.null,
@@ -160,6 +161,7 @@ module.exports = grammar({
     )),
 
     int_literal: $ => token(intLiteral),
+    uint_literal: $ => seq(token(intLiteral), 'u'),
     float_literal: $ => token(floatLiteral),
     null: $ => 'null',
     true: $ => 'true',
