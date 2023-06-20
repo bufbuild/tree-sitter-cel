@@ -40,6 +40,10 @@
           "named": true
         },
         {
+          "type": "list_expression",
+          "named": true
+        },
+        {
           "type": "member_call_expression",
           "named": true
         },
@@ -108,6 +112,10 @@
           },
           {
             "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "list_expression",
             "named": true
           },
           {
@@ -235,6 +243,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -333,6 +345,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -399,6 +415,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -462,6 +482,10 @@
           },
           {
             "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "list_expression",
             "named": true
           },
           {
@@ -537,6 +561,10 @@
           "named": true
         },
         {
+          "type": "list_expression",
+          "named": true
+        },
+        {
           "type": "member_call_expression",
           "named": true
         },
@@ -608,6 +636,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -674,6 +706,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -709,6 +745,81 @@
     "type": "int_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "list_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float_literal",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
+          "named": true
+        },
+        {
+          "type": "int_literal",
+          "named": true
+        },
+        {
+          "type": "list_expression",
+          "named": true
+        },
+        {
+          "type": "member_call_expression",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "select_expression",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "uint_literal",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "member_call_expression",
@@ -768,6 +879,10 @@
           },
           {
             "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "list_expression",
             "named": true
           },
           {
@@ -840,6 +955,10 @@
         },
         {
           "type": "int_literal",
+          "named": true
+        },
+        {
+          "type": "list_expression",
           "named": true
         },
         {
@@ -924,6 +1043,10 @@
             "named": true
           },
           {
+            "type": "list_expression",
+            "named": true
+          },
+          {
             "type": "member_call_expression",
             "named": true
           },
@@ -998,6 +1121,10 @@
           },
           {
             "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "list_expression",
             "named": true
           },
           {

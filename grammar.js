@@ -63,6 +63,7 @@ module.exports = grammar({
     // TODO: add the actual grammar rules
     expr: $ => $._expression,
     _expression: $ => choice(
+      $.list_expression,
       $.call_expression,
       $.index_expression,
       $.member_call_expression,
@@ -90,6 +91,12 @@ module.exports = grammar({
       '(',
       $._expression,
       ')'
+    ),
+
+    list_expression: $ => seq(
+      '[',
+      optional($._expressions),
+      ']'
     ),
 
     index_expression: $ => prec(PREC.primary, seq(

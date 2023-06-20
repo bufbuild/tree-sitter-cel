@@ -118,3 +118,18 @@ Uint literal
             (uint_literal))
           (uint_literal))
         (uint_literal)))
+
+==================
+List expr
+==================
+[1, 2+a, 3u][1]
+---
+    (expr
+      (index_expression
+        (list_expression
+          (int_literal)
+          (binary_expression
+            (int_literal)
+            (identifier))
+          (uint_literal))
+        (int_literal)))
