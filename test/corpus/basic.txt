@@ -26,3 +26,81 @@ a ? b || d : c || e
         (binary_expression
           (identifier)
           (identifier))))
+
+==================
+Select
+==================
+a.b.c
+---
+    (expr
+      (select_expression
+        (select_expression
+          (identifier)
+          (identifier))
+        (identifier)))
+
+==================
+Call
+==================
+a(1, 2) + b()
+---
+   (expr
+      (binary_expression
+        (call_expression
+          (identifier)
+          (arguments
+            (int_literal)
+            (int_literal)))
+        (call_expression
+          (identifier)
+          (arguments))))
+==================
+Member call
+==================
+a.b() + a.b.c(1, 2)
+---
+    (expr
+      (binary_expression
+        (member_call_expression
+          (identifier)
+          (identifier)
+          (arguments))
+        (member_call_expression
+          (select_expression
+            (identifier)
+            (identifier))
+          (identifier)
+          (arguments
+            (int_literal)
+            (int_literal)))))
+
+==================
+Index
+==================
+a[1] + b.c[2.0] + d[1][2] + e[1].f(1, 2)
+---
+   (expr
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (index_expression
+              (identifier)
+              (int_literal))
+            (index_expression
+              (select_expression
+                (identifier)
+                (identifier))
+              (float_literal)))
+          (index_expression
+            (index_expression
+              (identifier)
+              (int_literal))
+            (int_literal)))
+        (member_call_expression
+          (index_expression
+            (identifier)
+            (int_literal))
+          (identifier)
+          (arguments
+            (int_literal)
+            (int_literal)))))

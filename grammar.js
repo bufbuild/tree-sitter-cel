@@ -1,7 +1,7 @@
 const
   PREC = {
     primary: 9,
-    member: 8,
+    select: 8,
     unary: 7,
     multiplicative: 6,
     additive: 5,
@@ -63,6 +63,10 @@ module.exports = grammar({
     // TODO: add the actual grammar rules
     expr: $ => $._expression,
     _expression: $ => choice(
+      $.call_expression,
+      $.index_expression,
+      $.member_call_expression,
+      $.select_expression,
       $.conditional_expression,
       $.unary_expression,
       $.binary_expression,
@@ -75,9 +79,46 @@ module.exports = grammar({
       $.parenthesized_expression
     ),
 
+    _expressions : $ => seq(
+      $._expression,
+      repeat(seq(',', $._expression)),
+      optional(',')
+    ),
+
     parenthesized_expression: $ => seq(
       '(',
       $._expression,
+      ')'
+    ),
+
+    index_expression: $ => prec(PREC.primary, seq(
+      field('operand', $._expression),
+      '[',
+      field('index', $._expression),
+      ']'
+    )),
+
+    call_expression: $ => prec(PREC.primary, seq(
+      field('function', $.identifier),
+      field('arguments', $.arguments)
+    )),
+
+    select_expression: $ => prec(PREC.select, seq(
+      field('operand', $._expression),
+      '.',
+      field('member', $.identifier)
+    )),
+
+    member_call_expression: $ => prec(PREC.primary, seq(
+      field('operand', $._expression),
+      '.',
+      field('member', $.identifier),
+      field('arguments', $.arguments)
+    )),
+
+    arguments: $ => seq(
+      '(',
+      optional($._expressions),
       ')'
     ),
 
