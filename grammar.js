@@ -188,7 +188,7 @@ module.exports = grammar({
       optional($.identifier),
       choice(
         seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
-        seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'")
+        seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"),
     ))),
     null: $ => 'null',
     true: $ => 'true',
