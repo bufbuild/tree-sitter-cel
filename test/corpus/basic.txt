@@ -133,3 +133,39 @@ List expr
             (identifier))
           (uint_literal))
         (int_literal)))
+
+==================
+Map expr
+==================
+{a: 1, 'b': 2, "c": 3}[a]
+---
+    (expr
+      (index_expression
+        (map_expression
+          (map_entry
+            (identifier)
+            (int_literal))
+          (map_entry
+            (string_literal)
+            (int_literal))
+          (map_entry
+            (string_literal)
+            (int_literal)))
+        (identifier)))
+
+==================
+String literal
+==================
+"a" + b'b' + br"c" + hello"d"
+---
+    (expr
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (string_literal)
+            (string_literal
+              (identifier)))
+          (string_literal
+            (identifier)))
+        (string_literal
+          (identifier))))

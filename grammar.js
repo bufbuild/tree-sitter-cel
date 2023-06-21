@@ -63,6 +63,7 @@ module.exports = grammar({
     // TODO: add the actual grammar rules
     expr: $ => $._expression,
     _expression: $ => choice(
+      $.map_expression,
       $.list_expression,
       $.call_expression,
       $.index_expression,
@@ -75,6 +76,7 @@ module.exports = grammar({
       $.uint_literal,
       $.int_literal,
       $.float_literal,
+      $.string_literal,
       $.null,
       $.true,
       $.false,
@@ -92,6 +94,22 @@ module.exports = grammar({
       $._expression,
       ')'
     ),
+
+    map_expression: $ => seq(
+      '{',
+      optional(seq(
+        $.map_entry,
+        repeat(seq(',', $.map_entry)),
+        optional(',')
+      )),
+      '}'
+    ),
+    map_entry: $ => seq(
+      $._expression,
+      ':',
+      $._expression
+    ),
+
 
     list_expression: $ => seq(
       '[',
@@ -162,14 +180,16 @@ module.exports = grammar({
 
     },
 
-    identifier: $ => token(seq(
-      letter,
-      repeat(choice(letter, unicodeDigit))
-    )),
-
+    identifier: $ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
     int_literal: $ => token(intLiteral),
-    uint_literal: $ => seq(token(intLiteral), 'u'),
+    uint_literal: $ => seq(token(intLiteral), choice('u', 'U')),
     float_literal: $ => token(floatLiteral),
+    string_literal: $ => prec(PREC.primary, seq(
+      optional($.identifier),
+      choice(
+        seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
+        seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'")
+    ))),
     null: $ => 'null',
     true: $ => 'true',
     false: $ => 'false',
