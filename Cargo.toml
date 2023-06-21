@@ -1,5 +1,5 @@
 [package]
-name = "tree-sitter-CEL"
+name = "tree-sitter-cel"
 description = "CEL grammar for the tree-sitter parsing library"
 version = "0.0.1"
 keywords = ["incremental", "parsing", "CEL"]
@@ -9,12 +9,7 @@ edition = "2018"
 license = "MIT"
 
 build = "bindings/rust/build.rs"
-include = [
-  "bindings/rust/*",
-  "grammar.js",
-  "queries/*",
-  "src/*",
-]
+include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*"]
 
 [lib]
 path = "bindings/rust/lib.rs"

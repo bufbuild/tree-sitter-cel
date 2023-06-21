@@ -1,5 +1,5 @@
 {
-  "name": "CEL",
+  "name": "cel",
   "rules": {
     "expr": {
       "type": "SYMBOL",

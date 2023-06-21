@@ -53,7 +53,7 @@ const
   floatLiteral = choice(decimalFloatLiteral, hexFloatLiteral)
 
 module.exports = grammar({
-  name: 'CEL',
+  name: 'cel',
 
   rules: {
     // TODO: add the actual grammar rules
