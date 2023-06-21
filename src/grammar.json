@@ -26,11 +26,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "member_call_expression"
+          "name": "select_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "select_expression"
+          "name": "member_call_expression"
         },
         {
           "type": "SYMBOL",
@@ -1990,16 +1990,20 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "FIELD",
+            "name": "kind",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
           },
           {
             "type": "CHOICE",

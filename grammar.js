@@ -15,10 +15,6 @@ const
   additive_operators = ['+', '-'],
   comparative_operators = ['==', '!=', '<', '<=', '>', '>='],
 
-  unicodeLetter = /\p{L}/,
-  unicodeDigit = /[0-9]/,
-  letter = choice(unicodeLetter, '_'),
-
   newline = /\r?\n/,
   terminator = choice(newline, ';'),
 
@@ -62,13 +58,14 @@ module.exports = grammar({
   rules: {
     // TODO: add the actual grammar rules
     expr: $ => $._expression,
+
     _expression: $ => choice(
       $.map_expression,
       $.list_expression,
       $.call_expression,
       $.index_expression,
-      $.member_call_expression,
       $.select_expression,
+      $.member_call_expression,
       $.conditional_expression,
       $.unary_expression,
       $.binary_expression,
@@ -185,7 +182,7 @@ module.exports = grammar({
     uint_literal: $ => seq(token(intLiteral), choice('u', 'U')),
     float_literal: $ => token(floatLiteral),
     string_literal: $ => prec(PREC.primary, seq(
-      optional($.identifier),
+      field("kind", optional($.identifier)),
       choice(
         seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
         seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"),
