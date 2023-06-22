@@ -1050,7 +1050,7 @@
           }
         ]
       },
-      "member": {
+      "function": {
         "multiple": false,
         "required": true,
         "types": [

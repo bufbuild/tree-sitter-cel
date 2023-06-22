@@ -343,7 +343,7 @@
           },
           {
             "type": "FIELD",
-            "name": "member",
+            "name": "function",
             "content": {
               "type": "SYMBOL",
               "name": "identifier"

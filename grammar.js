@@ -100,7 +100,6 @@ module.exports = grammar({
       $._expression
     ),
 
-
     list_expression: $ => seq(
       '[',
       optional($._expressions),
@@ -128,7 +127,7 @@ module.exports = grammar({
     member_call_expression: $ => prec(PREC.primary, seq(
       field('operand', $._expression),
       '.',
-      field('member', $.identifier),
+      field('function', $.identifier),
       field('arguments', $.arguments)
     )),
 
