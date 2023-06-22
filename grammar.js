@@ -28,13 +28,6 @@ const
   decimalDigits = seq(decimalDigit, repeat(seq(optional('_'), decimalDigit))),
   binaryDigits = seq(binaryDigit, repeat(seq(optional('_'), binaryDigit))),
 
-  hexLiteral = seq('0', choice('x', 'X'), optional('_'), hexDigits),
-  octalLiteral = seq('0', optional(choice('o', 'O')), optional('_'), octalDigits),
-  decimalLiteral = choice('0', seq(/[1-9]/, optional(seq(optional('_'), decimalDigits)))),
-  binaryLiteral = seq('0', choice('b', 'B'), optional('_'), binaryDigits),
-
-  intLiteral = choice(binaryLiteral, decimalLiteral, octalLiteral, hexLiteral),
-
   decimalExponent = seq(choice('e', 'E'), optional(choice('+', '-')), decimalDigits),
   decimalFloatLiteral = choice(
     seq(decimalDigits, '.', optional(decimalDigits), optional(decimalExponent)),
@@ -178,8 +171,18 @@ module.exports = grammar({
     },
 
     identifier: $ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
-    int_literal: $ => token(intLiteral),
-    uint_literal: $ => seq(token(intLiteral), choice('u', 'U')),
+
+    hex_literal: $ => seq('0', choice('x', 'X'), optional('_'), hexDigits),
+    octal_literal: $ => seq('0', optional(choice('o', 'O')), optional('_'), octalDigits),
+    decimal_literal : $ => choice('0', seq(/[1-9]/, optional(seq(optional('_'), decimalDigits)))),
+    binary_literal : $ => seq('0', choice('b', 'B'), optional('_'), binaryDigits),
+    int_literal: $ => choice(
+      $.hex_literal,
+      $.octal_literal,
+      $.decimal_literal,
+      $.binary_literal
+    ),
+    uint_literal: $ => seq($.int_literal, choice('u', 'U')),
     float_literal: $ => token(floatLiteral),
     string_literal: $ => prec(PREC.primary, seq(
       field("kind", optional($.identifier)),

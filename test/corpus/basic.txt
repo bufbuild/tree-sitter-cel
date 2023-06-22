@@ -6,11 +6,15 @@ Operator precedence
     (expr
       (binary_expression
         (binary_expression
-          (int_literal)
+          (int_literal
+            (decimal_literal))
           (binary_expression
-            (int_literal)
-            (int_literal)))
-        (int_literal)))
+            (int_literal
+              (decimal_literal))
+            (int_literal
+              (decimal_literal))))
+        (int_literal
+          (decimal_literal))))
 
 ==================
 Conditional
@@ -49,11 +53,14 @@ a(1, 2) + b()
         (call_expression
           (identifier)
           (arguments
-            (int_literal)
-            (int_literal)))
+            (int_literal
+              (decimal_literal))
+            (int_literal
+              (decimal_literal))))
         (call_expression
           (identifier)
           (arguments))))
+
 ==================
 Member call
 ==================
@@ -71,8 +78,10 @@ a.b() + a.b.c(1, 2)
             (identifier))
           (identifier)
           (arguments
-            (int_literal)
-            (int_literal)))))
+            (int_literal
+              (decimal_literal))
+            (int_literal
+              (decimal_literal))))))
 
 ==================
 Index
@@ -85,7 +94,8 @@ a[1] + b.c[2.0] + d[1][2] + e[1].f(1, 2)
           (binary_expression
             (index_expression
               (identifier)
-              (int_literal))
+              (int_literal
+                (decimal_literal)))
             (index_expression
               (select_expression
                 (identifier)
@@ -94,30 +104,43 @@ a[1] + b.c[2.0] + d[1][2] + e[1].f(1, 2)
           (index_expression
             (index_expression
               (identifier)
-              (int_literal))
-            (int_literal)))
+              (int_literal
+                (decimal_literal)))
+            (int_literal
+              (decimal_literal))))
         (member_call_expression
           (index_expression
             (identifier)
-            (int_literal))
+            (int_literal
+              (decimal_literal)))
           (identifier)
           (arguments
-            (int_literal)
-            (int_literal)))))
+            (int_literal
+              (decimal_literal))
+            (int_literal
+              (decimal_literal))))))
 
 ==================
 Uint literal
 ==================
 1u + 0x1u + 0b1u + 0o1u
 ---
-   (expr
+    (expr
       (binary_expression
         (binary_expression
           (binary_expression
-            (uint_literal)
-            (uint_literal))
-          (uint_literal))
-        (uint_literal)))
+            (uint_literal
+              (int_literal
+                (decimal_literal)))
+            (uint_literal
+              (int_literal
+                (hex_literal))))
+          (uint_literal
+            (int_literal
+              (binary_literal))))
+        (uint_literal
+          (int_literal
+            (octal_literal)))))
 
 ==================
 List expr
@@ -127,12 +150,18 @@ List expr
     (expr
       (index_expression
         (list_expression
-          (int_literal)
+          (int_literal
+            (decimal_literal))
           (binary_expression
-            (int_literal)
+            (int_literal
+              (decimal_literal))
             (identifier))
-          (uint_literal))
-        (int_literal)))
+          (uint_literal
+            (int_literal
+              (decimal_literal))))
+        (int_literal
+          (decimal_literal))))
+
 
 ==================
 Map expr
@@ -144,13 +173,16 @@ Map expr
         (map_expression
           (map_entry
             (identifier)
-            (int_literal))
+            (int_literal
+              (decimal_literal)))
           (map_entry
             (string_literal)
-            (int_literal))
+            (int_literal
+              (decimal_literal)))
           (map_entry
             (string_literal)
-            (int_literal)))
+            (int_literal
+              (decimal_literal))))
         (identifier)))
 
 ==================
