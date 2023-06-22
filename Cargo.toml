@@ -2,9 +2,9 @@
 name = "tree-sitter-cel"
 description = "CEL grammar for the tree-sitter parsing library"
 version = "0.0.1"
-keywords = ["incremental", "parsing", "CEL"]
+keywords = ["incremental", "parsing", "cel"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-CEL"
+repository = "https://github.com/tree-sitter/tree-sitter-cel"
 edition = "2018"
 license = "MIT"
 

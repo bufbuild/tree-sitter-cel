@@ -4,25 +4,27 @@
 
 using namespace v8;
 
-extern "C" TSLanguage * tree_sitter_CEL();
+extern "C" TSLanguage *tree_sitter_cel();
 
-namespace {
+namespace
+{
 
-NAN_METHOD(New) {}
+  NAN_METHOD(New) {}
 
-void Init(Local<Object> exports, Local<Object> module) {
-  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("Language").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  void Init(Local<Object> exports, Local<Object> module)
+  {
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Language").ToLocalChecked());
+    tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-  Local<Function> constructor = Nan::GetFunction(tpl).ToLocalChecked();
-  Local<Object> instance = constructor->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
-  Nan::SetInternalFieldPointer(instance, 0, tree_sitter_CEL());
+    Local<Function> constructor = Nan::GetFunction(tpl).ToLocalChecked();
+    Local<Object> instance = constructor->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+    Nan::SetInternalFieldPointer(instance, 0, tree_sitter_cel());
 
-  Nan::Set(instance, Nan::New("name").ToLocalChecked(), Nan::New("CEL").ToLocalChecked());
-  Nan::Set(module, Nan::New("exports").ToLocalChecked(), instance);
-}
+    Nan::Set(instance, Nan::New("name").ToLocalChecked(), Nan::New("cel").ToLocalChecked());
+    Nan::Set(module, Nan::New("exports").ToLocalChecked(), instance);
+  }
 
-NODE_MODULE(tree_sitter_CEL_binding, Init)
+  NODE_MODULE(tree_sitter_CEL_binding, Init)
 
-}  // namespace
+} // namespace
