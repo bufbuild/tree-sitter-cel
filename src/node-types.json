@@ -579,6 +579,11 @@
     "fields": {}
   },
   {
+    "type": "double_quote_string_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "expr",
     "named": true,
     "fields": {},
@@ -1323,6 +1328,11 @@
     }
   },
   {
+    "type": "single_quoted_string_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "string_literal",
     "named": true,
     "fields": {
@@ -1335,8 +1345,40 @@
             "named": true
           }
         ]
+      },
+      "quoted": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "double_quote_string_literal",
+            "named": true
+          },
+          {
+            "type": "single_quoted_string_literal",
+            "named": true
+          },
+          {
+            "type": "triple_double_quote_string_literal",
+            "named": true
+          },
+          {
+            "type": "triple_single_quoted_string_literall",
+            "named": true
+          }
+        ]
       }
     }
+  },
+  {
+    "type": "triple_double_quote_string_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "triple_single_quoted_string_literall",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "uint_literal",
@@ -1468,6 +1510,10 @@
     "named": false
   },
   {
+    "type": "\"\"\"",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -1477,6 +1523,10 @@
   },
   {
     "type": "'",
+    "named": false
+  },
+  {
+    "type": "'''",
     "named": false
   },
   {

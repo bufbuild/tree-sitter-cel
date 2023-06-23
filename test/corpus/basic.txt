@@ -168,7 +168,7 @@ Map expr
 ==================
 {a: 1, 'b': 2, "c": 3}[a]
 ---
-    (expr
+  (expr
       (index_expression
         (map_expression
           (map_entry
@@ -176,11 +176,13 @@ Map expr
             (int_literal
               (decimal_literal)))
           (map_entry
-            (string_literal)
+            (string_literal
+              (single_quoted_string_literal))
             (int_literal
               (decimal_literal)))
           (map_entry
-            (string_literal)
+            (string_literal
+              (double_quote_string_literal))
             (int_literal
               (decimal_literal))))
         (identifier)))
@@ -194,10 +196,14 @@ String literal
       (binary_expression
         (binary_expression
           (binary_expression
-            (string_literal)
             (string_literal
-              (identifier)))
+              (double_quote_string_literal))
+            (string_literal
+              (identifier)
+              (single_quoted_string_literal)))
           (string_literal
-            (identifier)))
+            (identifier)
+            (double_quote_string_literal)))
         (string_literal
-          (identifier))))
+          (identifier)
+          (double_quote_string_literal))))

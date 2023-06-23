@@ -4,9 +4,9 @@
   "description": "Tree Sitter Parser for CEL",
   "main": "bindings/node",
   "scripts": {
-    "test": "npx tree-sitter test",
+    "test": "npm run generate && npx tree-sitter test",
     "generate": "npx tree-sitter generate",
-    "build": "npx tree-sitter build-wasm"
+    "build": "npm run generate && npx tree-sitter build-wasm"
   },
   "author": "",
   "license": "ISC",

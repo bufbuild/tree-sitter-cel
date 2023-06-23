@@ -183,12 +183,28 @@ module.exports = grammar({
     ),
     uint_literal: $ => seq($.int_literal, choice('u', 'U')),
     float_literal: $ => token(floatLiteral),
+
+    double_quote_string_literal: $ => seq(
+      '"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'
+    ),
+    single_quoted_string_literal: $ => seq(
+      "'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"
+    ),
+    triple_double_quote_string_literal: $ => seq(
+      '"""', repeat(choice(/[^"\\]/, /\\./)), '"""'
+    ),
+    triple_single_quoted_string_literall: $ => seq(
+      "'''", repeat(choice(/[^'\\]/, /\\./)), "'''"
+    ),
+
     string_literal: $ => prec(PREC.primary, seq(
       field("kind", optional($.identifier)),
-      choice(
-        seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
-        seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"),
-    ))),
+      field("quoted", choice(
+        $.double_quote_string_literal,
+        $.single_quoted_string_literal,
+        $.triple_double_quote_string_literal,
+        $.triple_single_quoted_string_literall
+    )))),
     null: $ => 'null',
     true: $ => 'true',
     false: $ => 'false',
