@@ -113,15 +113,15 @@ module.exports = grammar({
       ']'
     )),
 
-    call_expression: $ => prec(PREC.primary, seq(
-      field('function', $.identifier),
-      field('arguments', $.arguments)
-    )),
-
     select_expression: $ => prec(PREC.select, seq(
       field('operand', $._expression),
       '.',
       field('member', $.identifier)
+    )),
+
+    call_expression: $ => prec(PREC.primary, seq(
+      field('function', $.identifier),
+      field('arguments', $.arguments)
     )),
 
     member_call_expression: $ => prec(PREC.primary, seq(
