@@ -4,7 +4,8 @@
   "description": "Tree Sitter Parser for CEL",
   "main": "bindings/node",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx tree-sitter test",
+    "generate": "npx tree-sitter generate"
   },
   "author": "",
   "license": "ISC",
