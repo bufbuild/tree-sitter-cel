@@ -5,7 +5,8 @@
   "main": "bindings/node",
   "scripts": {
     "test": "npx tree-sitter test",
-    "generate": "npx tree-sitter generate"
+    "generate": "npx tree-sitter generate",
+    "build": "npx tree-sitter build-wasm"
   },
   "author": "",
   "license": "ISC",
