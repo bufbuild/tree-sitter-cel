@@ -13,7 +13,7 @@ const
 
   multiplicative_operators = ['*', '/', '%'],
   additive_operators = ['+', '-'],
-  comparative_operators = ['==', '!=', '<', '<=', '>', '>='],
+  comparative_operators = ['==', '!=', '<', '<=', '>', '>=', 'in'],
 
   newline = /\r?\n/,
   terminator = choice(newline, ';'),
@@ -30,7 +30,7 @@ const
 
   decimalExponent = seq(choice('e', 'E'), optional(choice('+', '-')), decimalDigits),
   decimalFloatLiteral = choice(
-    seq(decimalDigits, '.', optional(decimalDigits), optional(decimalExponent)),
+    seq(decimalDigits, '.',decimalDigits, optional(decimalExponent)),
     seq(decimalDigits, decimalExponent),
     seq('.', decimalDigits, optional(decimalExponent)),
   ),
@@ -54,6 +54,7 @@ module.exports = grammar({
 
     _expression: $ => choice(
       $.map_expression,
+      $.struct_expression,
       $.list_expression,
       $.call_expression,
       $.index_expression,
@@ -85,6 +86,25 @@ module.exports = grammar({
       ')'
     ),
 
+    struct_expression : $ =>  prec(PREC.primary, seq(
+      field('type', $._expression),
+      '{',
+      optional(field('fields', $.struct_fields)),
+      '}'
+    )),
+
+    struct_fields: $ => seq(
+        $.field_initializer,
+        repeat(seq(',', $.field_initializer)),
+        optional(',')
+    ),
+
+    field_initializer: $ => seq(
+      field('key', $.identifier),
+      ':',
+      field('value', $._expression)
+    ),
+
     map_expression: $ => seq(
       '{',
       optional(seq(
@@ -95,9 +115,9 @@ module.exports = grammar({
       '}'
     ),
     map_entry: $ => seq(
-      $._expression,
+      field('key', $._expression),
       ':',
-      $._expression
+      field('value', $._expression)
     ),
 
     list_expression: $ => seq(
