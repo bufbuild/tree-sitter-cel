@@ -1,241 +1,195 @@
-const
-  PREC = {
-    primary: 9,
-    select: 8,
-    unary: 7,
-    multiplicative: 6,
-    additive: 5,
-    comparative: 4,
-    and: 3,
-    or: 2,
-    conditional: 1,
-  },
-
-  multiplicative_operators = ['*', '/', '%'],
-  additive_operators = ['+', '-'],
-  comparative_operators = ['==', '!=', '<', '<=', '>', '>=', 'in'],
-
-  newline = /\r?\n/,
-  terminator = choice(newline, ';'),
-
-  hexDigit = /[0-9a-fA-F]/,
-  octalDigit = /[0-7]/,
-  decimalDigit = /[0-9]/,
-  binaryDigit = /[01]/,
-
-  hexDigits = seq(hexDigit, repeat(seq(optional('_'), hexDigit))),
-  octalDigits = seq(octalDigit, repeat(seq(optional('_'), octalDigit))),
-  decimalDigits = seq(decimalDigit, repeat(seq(optional('_'), decimalDigit))),
-  binaryDigits = seq(binaryDigit, repeat(seq(optional('_'), binaryDigit))),
-
-  decimalExponent = seq(choice('e', 'E'), optional(choice('+', '-')), decimalDigits),
-  decimalFloatLiteral = choice(
-    seq(decimalDigits, '.',decimalDigits, optional(decimalExponent)),
-    seq(decimalDigits, decimalExponent),
-    seq('.', decimalDigits, optional(decimalExponent)),
-  ),
-
-  hexExponent = seq(choice('p', 'P'), optional(choice('+', '-')), decimalDigits),
-  hexMantissa = choice(
-    seq(optional('_'), hexDigits, '.', optional(hexDigits)),
-    seq(optional('_'), hexDigits),
-    seq('.', hexDigits),
-  ),
-  hexFloatLiteral = seq('0', choice('x', 'X'), hexMantissa, hexExponent),
-
-  floatLiteral = choice(decimalFloatLiteral, hexFloatLiteral)
+/* eslint-disable comma-dangle */
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
+const PREC = {
+  primary: 9,
+  select: 8,
+  unary: 7,
+  multiplicative: 6,
+  additive: 5,
+  comparative: 4,
+  and: 3,
+  or: 2,
+  conditional: 1,
+}
+const multiplicative_operators = ['*', '/', '%']
+const additive_operators = ['+', '-']
+const comparative_operators = ['==', '!=', '<', '<=', '>', '>=', 'in']
+const hexDigit = /[0-9a-fA-F]/
+const octalDigit = /[0-7]/
+const decimalDigit = /[0-9]/
+const binaryDigit = /[01]/
+const hexDigits = seq(hexDigit, repeat(seq(optional('_'), hexDigit)))
+const octalDigits = seq(octalDigit, repeat(seq(optional('_'), octalDigit)))
+const decimalDigits = seq(decimalDigit, repeat(seq(optional('_'), decimalDigit)))
+const binaryDigits = seq(binaryDigit, repeat(seq(optional('_'), binaryDigit)))
+const decimalExponent = seq(choice('e', 'E'), optional(choice('+', '-')), decimalDigits)
+const decimalFloatLiteral = choice(
+  seq(decimalDigits, '.', decimalDigits, optional(decimalExponent)),
+  seq(decimalDigits, decimalExponent),
+  seq('.', decimalDigits, optional(decimalExponent))
+)
+const hexExponent = seq(choice('p', 'P'), optional(choice('+', '-')), decimalDigits)
+const hexMantissa = choice(
+  seq(optional('_'), hexDigits, '.', optional(hexDigits)),
+  seq(optional('_'), hexDigits),
+  seq('.', hexDigits)
+)
+const hexFloatLiteral = seq('0', choice('x', 'X'), hexMantissa, hexExponent)
+const floatLiteral = choice(decimalFloatLiteral, hexFloatLiteral)
 
 module.exports = grammar({
   name: 'cel',
 
   rules: {
     // TODO: add the actual grammar rules
-    expr: $ => $._expression,
+    expr: ($) => $._expression,
 
-    _expression: $ => choice(
-      $.map_expression,
-      $.struct_expression,
-      $.list_expression,
-      $.call_expression,
-      $.index_expression,
-      $.select_expression,
-      $.member_call_expression,
-      $.conditional_expression,
-      $.unary_expression,
-      $.binary_expression,
-      $.identifier,
-      $.uint_literal,
-      $.int_literal,
-      $.float_literal,
-      $.string_literal,
-      $.null,
-      $.true,
-      $.false,
-      $.parenthesized_expression
-    ),
+    _expression: ($) =>
+      choice(
+        $.map_expression,
+        $.struct_expression,
+        $.list_expression,
+        $.call_expression,
+        $.index_expression,
+        $.select_expression,
+        $.member_call_expression,
+        $.conditional_expression,
+        $.unary_expression,
+        $.binary_expression,
+        $.identifier,
+        $.uint_literal,
+        $.int_literal,
+        $.float_literal,
+        $.string_literal,
+        $.null,
+        $.true,
+        $.false,
+        $.parenthesized_expression
+      ),
 
-    _expressions : $ => seq(
-      $._expression,
-      repeat(seq(',', $._expression)),
-      optional(',')
-    ),
+    _expressions: ($) => seq($._expression, repeat(seq(',', $._expression)), optional(',')),
 
-    parenthesized_expression: $ => seq(
-      '(',
-      $._expression,
-      ')'
-    ),
+    parenthesized_expression: ($) => seq('(', $._expression, ')'),
 
-    struct_expression : $ =>  prec(PREC.primary, seq(
-      field('type', $._expression),
-      '{',
-      optional(field('fields', $.struct_fields)),
-      '}'
-    )),
+    struct_expression: ($) =>
+      prec(
+        PREC.primary,
+        seq(field('type', $._expression), '{', optional(field('fields', $.struct_fields)), '}')
+      ),
 
-    struct_fields: $ => seq(
-        $.field_initializer,
-        repeat(seq(',', $.field_initializer)),
-        optional(',')
-    ),
+    struct_fields: ($) =>
+      seq($.field_initializer, repeat(seq(',', $.field_initializer)), optional(',')),
 
-    field_initializer: $ => seq(
-      field('key', $.identifier),
-      ':',
-      field('value', $._expression)
-    ),
+    field_initializer: ($) => seq(field('key', $.identifier), ':', field('value', $._expression)),
 
-    map_expression: $ => seq(
-      '{',
-      optional(seq(
-        $.map_entry,
-        repeat(seq(',', $.map_entry)),
-        optional(',')
-      )),
-      '}'
-    ),
-    map_entry: $ => seq(
-      field('key', $._expression),
-      ':',
-      field('value', $._expression)
-    ),
+    map_expression: ($) =>
+      seq('{', optional(seq($.map_entry, repeat(seq(',', $.map_entry)), optional(','))), '}'),
+    map_entry: ($) => seq(field('key', $._expression), ':', field('value', $._expression)),
 
-    list_expression: $ => seq(
-      '[',
-      optional($._expressions),
-      ']'
-    ),
+    list_expression: ($) => seq('[', optional($._expressions), ']'),
 
-    index_expression: $ => prec(PREC.primary, seq(
-      field('operand', $._expression),
-      '[',
-      field('index', $._expression),
-      ']'
-    )),
+    index_expression: ($) =>
+      prec(
+        PREC.primary,
+        seq(field('operand', $._expression), '[', field('index', $._expression), ']')
+      ),
 
-    select_expression: $ => prec(PREC.select, seq(
-      field('operand', $._expression),
-      '.',
-      field('member', $.identifier)
-    )),
+    select_expression: ($) =>
+      prec(PREC.select, seq(field('operand', $._expression), '.', field('member', $.identifier))),
 
-    call_expression: $ => prec(PREC.primary, seq(
-      field('function', $.identifier),
-      field('arguments', $.arguments)
-    )),
+    call_expression: ($) =>
+      prec(PREC.primary, seq(field('function', $.identifier), field('arguments', $.arguments))),
 
-    member_call_expression: $ => prec(PREC.primary, seq(
-      field('operand', $._expression),
-      '.',
-      field('function', $.identifier),
-      field('arguments', $.arguments)
-    )),
+    member_call_expression: ($) =>
+      prec(
+        PREC.primary,
+        seq(
+          field('operand', $._expression),
+          '.',
+          field('function', $.identifier),
+          field('arguments', $.arguments)
+        )
+      ),
 
-    arguments: $ => seq(
-      '(',
-      optional($._expressions),
-      ')'
-    ),
+    arguments: ($) => seq('(', optional($._expressions), ')'),
 
-    conditional_expression: $ => prec.right(PREC.conditional, seq(
-      field('condition', $._expression),
-      '?',
-      field('consequence', $._expression),
-      ':',
-      field('alternative', $._expression)
-    )),
+    conditional_expression: ($) =>
+      prec.right(
+        PREC.conditional,
+        seq(
+          field('condition', $._expression),
+          '?',
+          field('consequence', $._expression),
+          ':',
+          field('alternative', $._expression)
+        )
+      ),
 
-    unary_expression: $ => prec(PREC.unary, seq(
-      field('operator', choice('+', '-', '!')),
-      field('operand', $._expression)
-    )),
+    unary_expression: ($) =>
+      prec(
+        PREC.unary,
+        seq(field('operator', choice('+', '-', '!')), field('operand', $._expression))
+      ),
 
-    binary_expression: $ => {
+    binary_expression: ($) => {
       const table = [
         [PREC.multiplicative, choice(...multiplicative_operators)],
         [PREC.additive, choice(...additive_operators)],
         [PREC.comparative, choice(...comparative_operators)],
         [PREC.and, '&&'],
         [PREC.or, '||'],
-      ];
+      ]
 
-      return choice(...table.map(([precedence, operator]) =>
-        prec.left(precedence, seq(
-          field('left', $._expression),
-          field('operator', operator),
-          field('right', $._expression)
-        ))
-      ));
-
+      return choice(
+        ...table.map(([precedence, operator]) =>
+          prec.left(
+            precedence,
+            seq(
+              field('left', $._expression),
+              field('operator', operator),
+              field('right', $._expression)
+            )
+          )
+        )
+      )
     },
 
-    identifier: $ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+    identifier: ($) => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
-    hex_literal: $ => seq('0', choice('x', 'X'), optional('_'), hexDigits),
-    octal_literal: $ => seq('0', optional(choice('o', 'O')), optional('_'), octalDigits),
-    decimal_literal : $ => choice('0', seq(/[1-9]/, optional(seq(optional('_'), decimalDigits)))),
-    binary_literal : $ => seq('0', choice('b', 'B'), optional('_'), binaryDigits),
-    int_literal: $ => choice(
-      $.hex_literal,
-      $.octal_literal,
-      $.decimal_literal,
-      $.binary_literal
-    ),
-    uint_literal: $ => seq($.int_literal, choice('u', 'U')),
-    float_literal: $ => token(floatLiteral),
+    hex_literal: ($) => seq('0', choice('x', 'X'), optional('_'), hexDigits),
+    octal_literal: ($) => seq('0', optional(choice('o', 'O')), optional('_'), octalDigits),
+    decimal_literal: ($) => choice('0', seq(/[1-9]/, optional(seq(optional('_'), decimalDigits)))),
+    binary_literal: ($) => seq('0', choice('b', 'B'), optional('_'), binaryDigits),
+    int_literal: ($) => choice($.hex_literal, $.octal_literal, $.decimal_literal, $.binary_literal),
+    uint_literal: ($) => seq($.int_literal, choice('u', 'U')),
+    float_literal: ($) => token(floatLiteral),
 
-    double_quote_string_literal: $ => seq(
-      '"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'
-    ),
-    single_quoted_string_literal: $ => seq(
-      "'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"
-    ),
-    triple_double_quote_string_literal: $ => seq(
-      '"""', repeat(choice(/[^"\\]/, /\\./)), '"""'
-    ),
-    triple_single_quoted_string_literall: $ => seq(
-      "'''", repeat(choice(/[^'\\]/, /\\./)), "'''"
-    ),
+    double_quote_string_literal: ($) => seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
+    single_quoted_string_literal: ($) => seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"),
+    triple_double_quote_string_literal: ($) => seq('"""', repeat(choice(/[^"\\]/, /\\./)), '"""'),
+    triple_single_quoted_string_literall: ($) => seq("'''", repeat(choice(/[^'\\]/, /\\./)), "'''"),
 
-    string_literal: $ => prec(PREC.primary, seq(
-      field("kind", optional($.identifier)),
-      field("quoted", choice(
-        $.double_quote_string_literal,
-        $.single_quoted_string_literal,
-        $.triple_double_quote_string_literal,
-        $.triple_single_quoted_string_literall
-    )))),
-    null: $ => 'null',
-    true: $ => 'true',
-    false: $ => 'false',
+    string_literal: ($) =>
+      prec(
+        PREC.primary,
+        seq(
+          field('kind', optional($.identifier)),
+          field(
+            'quoted',
+            choice(
+              $.double_quote_string_literal,
+              $.single_quoted_string_literal,
+              $.triple_double_quote_string_literal,
+              $.triple_single_quoted_string_literall
+            )
+          )
+        )
+      ),
+    null: ($) => 'null',
+    true: ($) => 'true',
+    false: ($) => 'false',
 
-    comment: $ => token(choice(
-      seq('//', /.*/),
-      seq(
-        '/*',
-        /[^*]*\*+([^/*][^*]*\*+)*/,
-        '/'
-      )
-    ))
+    comment: ($) => token(choice(seq('//', /.*/), seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
   },
-});
+})
