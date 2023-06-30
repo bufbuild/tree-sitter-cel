@@ -1604,7 +1604,7 @@
             "named": true
           },
           {
-            "type": "triple_single_quoted_string_literall",
+            "type": "triple_single_quoted_string_literal",
             "named": true
           }
         ]
@@ -1730,7 +1730,7 @@
     "fields": {}
   },
   {
-    "type": "triple_single_quoted_string_literall",
+    "type": "triple_single_quoted_string_literal",
     "named": true,
     "fields": {}
   },

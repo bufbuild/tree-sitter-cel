@@ -1905,7 +1905,7 @@
         }
       ]
     },
-    "triple_single_quoted_string_literall": {
+    "triple_single_quoted_string_literal": {
       "type": "SEQ",
       "members": [
         {
@@ -1976,7 +1976,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "triple_single_quoted_string_literall"
+                  "name": "triple_single_quoted_string_literal"
                 }
               ]
             }
