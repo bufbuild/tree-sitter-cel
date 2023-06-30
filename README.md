@@ -4,7 +4,7 @@
 
 Common Expression Language (CEL) grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter).
 
-For direction on how to use this grammar, the [tree-sitter](https://tree-sitter.github.io/tree-sitter/) documentation.
+For direction on how to use this grammar, see the [tree-sitter](https://tree-sitter.github.io/tree-sitter/) documentation.
 
 # References
 
