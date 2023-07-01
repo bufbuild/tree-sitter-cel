@@ -4,7 +4,7 @@
   "description": "Tree Sitter Parser for CEL",
   "main": "bindings/node",
   "scripts": {
-    "build": "npm run generate && node-gyp build",
+    "build": "npm run generate && node-gyp build && npx tree-sitter build-wasm",
     "test": "npm run generate && npx tree-sitter test",
     "test-windows": "npx tree-sitter test",
     "generate": "npx tree-sitter generate",
