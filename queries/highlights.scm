@@ -11,6 +11,7 @@
   "<"
   "<="
   "=="
+  "!="
   ">"
   ">="
   "||"
@@ -31,13 +32,6 @@
   function: (identifier) @function)
 
 ; Identifiers
-
-(select_expression
-  operand: (identifier) @type)
-
-(select_expression
-  operand: (select_expression
-    member: (identifier) @type))
 
 (identifier) @property
 
