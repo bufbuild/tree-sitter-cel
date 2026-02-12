@@ -181,10 +181,12 @@ module.exports = grammar({
     uint_literal: ($) => seq($.int_literal, choice('u', 'U')),
     float_literal: ($) => token(floatLiteral),
 
-    double_quote_string_literal: ($) => seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"'),
-    single_quoted_string_literal: ($) => seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'"),
-    triple_double_quote_string_literal: ($) => seq('"""', repeat(choice(/[^"\\]/, /\\./)), '"""'),
-    triple_single_quoted_string_literal: ($) => seq("'''", repeat(choice(/[^'\\]/, /\\./)), "'''"),
+    double_quote_string_literal: ($) => token(seq('"', repeat(choice(/[^"\\\r\n]/, /\\./)), '"')),
+    single_quoted_string_literal: ($) => token(seq("'", repeat(choice(/[^'\\\r\n]/, /\\./)), "'")),
+    triple_double_quote_string_literal: ($) =>
+      token(seq('"""', repeat(choice(/[^"\\]/, /\\./, /"[^"]/, /""[^"]/)), optional(/""?/), '"""')),
+    triple_single_quoted_string_literal: ($) =>
+      token(seq("'''", repeat(choice(/[^'\\]/, /\\./, /'[^']/, /''[^']/)), optional(/''?/), "'''")),
 
     string_literal: ($) =>
       prec(

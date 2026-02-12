@@ -1,0 +1,59 @@
+// Examples of different string types in CEL
+// This file demonstrates various string literal forms
+
+// All examples combined in a single CEL expression
+{
+  // Double-quoted strings
+  "double": "Hello, world!",
+
+  // Single-quoted strings (raw strings, no escape sequences)
+  "single": 'Hello, world!',
+
+  // Strings with escape sequences
+  "escaped": "Line 1\nLine 2\tTabbed",
+
+  // Unicode escapes
+  "unicode": "Hello \u0041\u0042\u0043",
+
+  // Raw strings don't process escapes
+  "raw_path": 'C:\path\to\file\newfile.txt',
+
+  // Triple-quoted strings (multiline)
+  "triple_double": """
+This is a
+multiline string
+with "quotes" inside
+and 'single quotes' too
+""",
+
+  // Triple single-quoted strings (multiline raw)
+  "triple_single": '''
+This is also a
+multiline string
+but raw: \n won't create newline
+''',
+
+  // String operations
+  "startsWith": "hello".startsWith("h"),
+  "endsWith": "world".endsWith("d"),
+
+  // String concatenation
+  "concat": "hello" + " " + "world",
+
+  // String comparisons
+  "compare": "abc" < "def" && "xyz" == "xyz",
+
+  // Strings with special characters
+  "email": "user@example.com",
+  "url": "https://example.com/path?query=value",
+
+  // Empty strings
+  "empty_double": "",
+  "empty_single": '',
+
+  // String in function
+  "size": size("hello") == 5,
+
+  // Conditional with strings
+  "conditional": true ? "yes" : "no"
+}
