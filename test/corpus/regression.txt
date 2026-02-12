@@ -41,3 +41,126 @@ in
             (decimal_literal))
           (int_literal
             (decimal_literal)))))
+==================
+triple-quoted string with quotes inside
+==================
+"""quotes "inside" here"""
+---
+    (expr
+      (string_literal
+        (triple_double_quote_string_literal)))
+==================
+triple-quoted string with quotes multiline
+==================
+"""
+line with "quotes"
+and 'single quotes'
+"""
+---
+    (expr
+      (string_literal
+        (triple_double_quote_string_literal)))
+==================
+URL with double slash not treated as comment
+==================
+"https://example.com/path"
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal)))
+==================
+map with URL strings
+==================
+{"url": "https://example.com"}
+---
+    (expr
+      (map_expression
+        (map_entry
+          (string_literal
+            (double_quote_string_literal))
+          (string_literal
+            (double_quote_string_literal)))))
+==================
+triple-quoted single strings with quotes
+==================
+'''line with 'single' and "double" quotes'''
+---
+    (expr
+      (string_literal
+        (triple_single_quoted_string_literal)))
+==================
+escape sequences in double-quoted strings
+==================
+"line1\nline2\ttab\r\n\\backslash\"quote"
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal)))
+==================
+raw single-quoted string no escape processing
+==================
+'C:\path\to\file\newline\n'
+---
+    (expr
+      (string_literal
+        (single_quoted_string_literal)))
+==================
+empty strings
+==================
+"" + ''
+---
+    (expr
+      (binary_expression
+        (string_literal
+          (double_quote_string_literal))
+        (string_literal
+          (single_quoted_string_literal))))
+==================
+empty triple-quoted strings
+==================
+"""""" + ''''''
+---
+    (expr
+      (binary_expression
+        (string_literal
+          (triple_double_quote_string_literal))
+        (string_literal
+          (triple_single_quoted_string_literal))))
+==================
+triple-quoted with trailing quotes before closing
+==================
+"""text ends with quote" and two quotes"" here"""
+---
+    (expr
+      (string_literal
+        (triple_double_quote_string_literal)))
+==================
+string followed by comment
+==================
+"test" // this is a comment
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal))
+      (comment))
+==================
+string with comment-like content
+==================
+"https://example.com // not a comment"
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal)))
+==================
+byte string prefix
+==================
+b"bytes" + b'bytes'
+---
+    (expr
+      (binary_expression
+        (string_literal
+          (identifier)
+          (double_quote_string_literal))
+        (string_literal
+          (identifier)
+          (single_quoted_string_literal))))
