@@ -18,9 +18,7 @@
 
 ; Keywords
 
-[
-"in"
-] @keyword
+"in" @keyword
 
 ; Function calls
 
