@@ -2,26 +2,30 @@
   "name": "tree-sitter-cel",
   "version": "0.0.1",
   "description": "Tree Sitter Parser for CEL",
-  "main": "bindings/node",
+  "main": "bindings/node/index.js",
+  "types": "bindings/node/index.d.ts",
   "scripts": {
+    "install": "node-gyp-build",
     "build": "npm run generate && node-gyp build",
-    "test": "npm run generate && npx tree-sitter test",
-    "test-windows": "npx tree-sitter test",
+    "test": "node --test bindings/node/binding_test.js",
     "generate": "npx tree-sitter generate",
     "lint": "eslint grammar.js"
   },
   "author": "Buf Technologies, Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "nan": "^2.17.0"
+    "node-addon-api": "^8.2.2",
+    "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "eslint": "^8.43.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
-    "tree-sitter-cli": "^0.20.8"
+    "tree-sitter": "^0.25.0",
+    "tree-sitter-cli": "^0.25.0"
   },
   "prettier": {
     "printWidth": 100,

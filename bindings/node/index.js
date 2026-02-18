@@ -1,19 +1,31 @@
-try {
-  module.exports = require("../../build/Release/tree_sitter_cel_binding");
-} catch (error1) {
-  if (error1.code !== 'MODULE_NOT_FOUND') {
-    throw error1;
-  }
-  try {
-    module.exports = require("../../build/Debug/tree_sitter_cel_binding");
-  } catch (error2) {
-    if (error2.code !== 'MODULE_NOT_FOUND') {
-      throw error2;
-    }
-    throw error1
-  }
-}
+const { readFileSync } = require('node:fs')
+const path = require('node:path')
+
+const root = path.join(__dirname, '..', '..')
+
+const binding = require('node-gyp-build')(root)
 
 try {
-  module.exports.nodeTypeInfo = require("../../src/node-types.json");
+  binding.nodeTypeInfo = require('../../src/node-types.json')
 } catch (_) {}
+
+const queries = [
+  ['HIGHLIGHTS_QUERY', path.join(root, 'queries', 'cel', 'highlights.scm')],
+  ['INJECTIONS_QUERY', path.join(root, 'queries', 'injections.scm')],
+]
+
+for (const [prop, queryPath] of queries) {
+  Object.defineProperty(binding, prop, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      delete binding[prop]
+      try {
+        binding[prop] = readFileSync(queryPath, 'utf8')
+      } catch (_) {}
+      return binding[prop]
+    },
+  })
+}
+
+module.exports = binding

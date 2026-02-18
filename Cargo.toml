@@ -2,20 +2,24 @@
 name = "tree-sitter-cel"
 description = "CEL grammar for the tree-sitter parsing library"
 version = "0.0.1"
-keywords = ["incremental", "parsing", "cel"]
+keywords = ["incremental", "parsing", "tree-sitter", "cel"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-cel"
-edition = "2018"
-license = "MIT"
+repository = "https://github.com/bufbuild/tree-sitter-cel"
+edition = "2021"
+license = "Apache-2.0"
+autoexamples = false
 
 build = "bindings/rust/build.rs"
-include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*"]
+include = ["LICENSE", "bindings/rust/*", "grammar.js", "queries/*", "src/*", "tree-sitter.json"]
 
 [lib]
 path = "bindings/rust/lib.rs"
 
 [dependencies]
-tree-sitter = "~0.20.10"
+tree-sitter-language = "0.1"
 
 [build-dependencies]
-cc = "1.0"
+cc = "1.1"
+
+[dev-dependencies]
+tree-sitter = "0.25"
