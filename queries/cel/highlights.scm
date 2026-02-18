@@ -1,5 +1,4 @@
 ; Operators
-
 [
   "-"
   "!"
@@ -17,11 +16,9 @@
 ] @operator
 
 ; Keywords
-
 "in" @keyword
 
 ; Function calls
-
 (call_expression
   function: (identifier) @function)
 
@@ -29,7 +26,6 @@
   function: (identifier) @function)
 
 ; Identifiers
-
 (select_expression
   operand: (identifier) @type)
 
@@ -40,7 +36,6 @@
 (identifier) @property
 
 ; Literals
-
 [
   (double_quote_string_literal)
   (single_quoted_string_literal)
