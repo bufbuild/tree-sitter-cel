@@ -1,3 +1,5 @@
+; Syntax highlighting queries for CEL (Common Expression Language).
+; Maps CEL grammar nodes to standard tree-sitter highlight capture names.
 ; Operators
 [
   "-"
@@ -20,20 +22,17 @@
 
 ; Function calls
 (call_expression
-  function: (identifier) @function)
+  function: (identifier) @function.call)
 
 (member_call_expression
-  function: (identifier) @function)
+  function: (identifier) @function.method.call)
 
-; Identifiers
+; Member access
 (select_expression
-  operand: (identifier) @type)
+  member: (identifier) @variable.member)
 
-(select_expression
-  operand: (select_expression
-    member: (identifier) @type))
-
-(identifier) @property
+; Variables
+(identifier) @variable
 
 ; Literals
 [
@@ -46,8 +45,9 @@
 [
   (int_literal)
   (uint_literal)
-  (float_literal)
 ] @number
+
+(float_literal) @number.float
 
 [
   (true)
@@ -55,4 +55,4 @@
   (null)
 ] @constant.builtin
 
-(comment) @comment
+(comment) @comment @spell
