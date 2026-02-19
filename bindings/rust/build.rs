@@ -36,7 +36,7 @@ fn main() {
 
     println!("cargo:rerun-if-changed=src/parser.c");
 
-    if std::path::Path::new("queries/cel/highlights.scm").exists() {
+    if std::path::Path::new("queries/highlights.scm").exists() {
         println!("cargo:rustc-cfg=feature=\"highlights\"");
     }
     if std::path::Path::new("queries/injections.scm").exists() {

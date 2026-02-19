@@ -26,7 +26,7 @@ pub const NODE_TYPES: &str = include_str!("../../src/node-types.json");
 
 #[cfg(feature = "highlights")]
 /// Syntax highlighting queries for the CEL language.
-pub const HIGHLIGHTS_QUERY: &str = include_str!("../../queries/cel/highlights.scm");
+pub const HIGHLIGHTS_QUERY: &str = include_str!("../../queries/highlights.scm");
 
 #[cfg(feature = "injections")]
 /// Language injections for the CEL language.
