@@ -1,0 +1,35 @@
+{
+  "grammars": [
+    {
+      "name": "cel",
+      "camelcase": "CEL",
+      "scope": "source.cel",
+      "path": ".",
+      "file-types": [
+        "cel"
+      ],
+      "highlights": "queries/highlights.scm",
+      "folds": "queries/folds.scm",
+      "indents": "queries/indents.scm",
+      "injections": "queries/injections.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "Apache-2.0",
+    "description": "Common Expression Language (CEL) grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Buf Technologies, Inc."
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/bufbuild/tree-sitter-cel"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "node": true,
+    "rust": true
+  }
+}

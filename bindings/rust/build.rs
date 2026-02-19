@@ -1,40 +1,45 @@
 fn main() {
-    let src_dir = std::path::Path::new("src");
+    println!("cargo:rustc-check-cfg=cfg(feature, values(\"highlights\", \"injections\"))");
 
     let mut c_config = cc::Build::new();
-    c_config.include(&src_dir);
-    c_config
-        .flag_if_supported("-Wno-unused-parameter")
-        .flag_if_supported("-Wno-unused-but-set-variable")
-        .flag_if_supported("-Wno-trigraphs");
-    let parser_path = src_dir.join("parser.c");
-    c_config.file(&parser_path);
+    c_config.std("c11").include("src");
+    #[cfg(target_env = "msvc")]
+    {
+        c_config.flag("/utf-8");
+    }
 
-    // If your language uses an external scanner written in C,
-    // then include this block of code:
+    if std::env::var("CARGO_CFG_TARGET_WASM32").is_ok() {
+        c_config
+            .flag_if_supported("-nostdinc")
+            .flag_if_supported("-Wno-builtin-macro-redefined");
+        let wasm_headers = std::env::var("DEP_TREE_SITTER_LANGUAGE_WASM_HEADERS")
+            .expect("DEP_TREE_SITTER_LANGUAGE_WASM_HEADERS is not set");
+        let wasm_src = std::env::var("DEP_TREE_SITTER_LANGUAGE_WASM_SRC")
+            .expect("DEP_TREE_SITTER_LANGUAGE_WASM_SRC is not set");
+        c_config.include(&wasm_headers);
 
-    /*
-    let scanner_path = src_dir.join("scanner.c");
-    c_config.file(&scanner_path);
-    println!("cargo:rerun-if-changed={}", scanner_path.to_str().unwrap());
-    */
+        let mut wasm_c_config = cc::Build::new();
+        wasm_c_config
+            .std("c11")
+            .include(&wasm_src)
+            .include(&wasm_headers)
+            .flag_if_supported("-nostdinc")
+            .flag_if_supported("-Wno-builtin-macro-redefined")
+            .file(format!("{}/stdio.c", wasm_src))
+            .file(format!("{}/stdlib.c", wasm_src))
+            .file(format!("{}/string.c", wasm_src));
+        wasm_c_config.compile("wasm");
+    }
 
-    c_config.compile("parser");
-    println!("cargo:rerun-if-changed={}", parser_path.to_str().unwrap());
+    c_config.file("src/parser.c");
+    c_config.compile("tree-sitter-cel");
 
-    // If your language uses an external scanner written in C++,
-    // then include this block of code:
+    println!("cargo:rerun-if-changed=src/parser.c");
 
-    /*
-    let mut cpp_config = cc::Build::new();
-    cpp_config.cpp(true);
-    cpp_config.include(&src_dir);
-    cpp_config
-        .flag_if_supported("-Wno-unused-parameter")
-        .flag_if_supported("-Wno-unused-but-set-variable");
-    let scanner_path = src_dir.join("scanner.cc");
-    cpp_config.file(&scanner_path);
-    cpp_config.compile("scanner");
-    println!("cargo:rerun-if-changed={}", scanner_path.to_str().unwrap());
-    */
+    if std::path::Path::new("queries/cel/highlights.scm").exists() {
+        println!("cargo:rustc-cfg=feature=\"highlights\"");
+    }
+    if std::path::Path::new("queries/injections.scm").exists() {
+        println!("cargo:rustc-cfg=feature=\"injections\"");
+    }
 }
