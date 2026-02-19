@@ -1,13 +1,10 @@
-.PHONY: generate test build clean
+.PHONY: generate test clean
 
 generate:
-	npm run generate
+	tree-sitter generate
 
 test:
 	npm test
-
-build: generate
-	npm run build
 
 clean:
 	rm -rf build node_modules target
