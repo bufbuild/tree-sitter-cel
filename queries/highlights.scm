@@ -1,6 +1,5 @@
 ; Syntax highlighting queries for CEL (Common Expression Language).
 ; Maps CEL grammar nodes to standard tree-sitter highlight capture names.
-
 ; Operators
 [
   "-"

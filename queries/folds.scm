@@ -1,6 +1,5 @@
 ; Code folding queries for CEL (Common Expression Language).
 ; Marks collection literals as foldable regions.
-
 ; Fold map expressions
 (map_expression) @fold
 
