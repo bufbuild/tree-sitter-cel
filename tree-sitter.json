@@ -8,10 +8,12 @@
       "file-types": [
         "cel"
       ],
+      "injection-regex": "^cel$",
       "highlights": "queries/highlights.scm",
       "folds": "queries/folds.scm",
       "indents": "queries/indents.scm",
-      "injections": "queries/injections.scm"
+      "injections": "queries/injections.scm",
+      "locals": "queries/locals.scm"
     }
   ],
   "metadata": {
