@@ -1,4 +1,117 @@
 ==================
+Standalone identifier
+==================
+a
+---
+    (expr
+      (identifier))
+
+==================
+Standalone true
+==================
+true
+---
+    (expr
+      (true))
+
+==================
+Standalone false
+==================
+false
+---
+    (expr
+      (false))
+
+==================
+Standalone null
+==================
+null
+---
+    (expr
+      (null))
+
+==================
+Absolute expression (name)
+==================
+.foo
+---
+    (expr
+      (absolute_expression
+        name: (identifier)))
+
+==================
+Absolute expression (function call)
+==================
+.func(a, b)
+---
+    (expr
+      (absolute_expression
+        name: (identifier)
+        arguments: (arguments
+          (identifier)
+          (identifier))))
+
+==================
+Absolute expression (member call)
+==================
+.pkg.func()
+---
+    (expr
+      (member_call_expression
+        operand: (absolute_expression
+          name: (identifier))
+        function: (identifier)
+        arguments: (arguments)))
+
+==================
+Absolute expression (qualified struct)
+==================
+.google.protobuf.Timestamp{seconds: 0}
+---
+    (expr
+      (struct_expression
+        type: (select_expression
+          operand: (select_expression
+            operand: (absolute_expression
+              name: (identifier))
+            member: (identifier))
+          member: (identifier))
+        fields: (struct_fields
+          (field_initializer
+            key: (identifier)
+            value: (int_literal
+              (decimal_literal))))))
+
+==================
+Reserved keyword standalone
+==================
+as
+---
+    (expr
+      (reserved_keyword))
+
+==================
+Reserved keyword as method name
+==================
+x.package()
+---
+    (expr
+      (member_call_expression
+        operand: (identifier)
+        function: (reserved_keyword)
+        arguments: (arguments)))
+
+==================
+Reserved keyword as member
+==================
+x.if
+---
+    (expr
+      (select_expression
+        operand: (identifier)
+        member: (reserved_keyword)))
+
+==================
 Operator precedence
 ==================
 1+2*3+4
@@ -17,6 +130,30 @@ Operator precedence
           (decimal_literal))))
 
 ==================
+Division and modulo
+==================
+a / b % c
+---
+    (expr
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier)))
+
+==================
+Logical operator precedence
+==================
+a || b && c
+---
+    (expr
+      (binary_expression
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier))))
+
+==================
 Conditional
 ==================
 a ? b || d : c || e
@@ -28,6 +165,20 @@ a ? b || d : c || e
           (identifier)
           (identifier))
         (binary_expression
+          (identifier)
+          (identifier))))
+
+==================
+Nested conditional
+==================
+a ? b : c ? d : e
+---
+    (expr
+      (conditional_expression
+        (identifier)
+        (identifier)
+        (conditional_expression
+          (identifier)
           (identifier)
           (identifier))))
 
@@ -123,24 +274,24 @@ a[1] + b.c[2.0] + d[1][2] + e[1].f(1, 2)
 ==================
 Uint literal
 ==================
-1u + 0x1u + 0b1u + 0o1u
+1u + 0x1u
+---
+    (expr
+      (binary_expression
+        (uint_literal)
+        (uint_literal)))
+
+==================
+Uint literal zero and uppercase suffix
+==================
+0u + 1U + 0xABU
 ---
     (expr
       (binary_expression
         (binary_expression
-          (binary_expression
-            (uint_literal
-              (int_literal
-                (decimal_literal)))
-            (uint_literal
-              (int_literal
-                (hex_literal))))
-          (uint_literal
-            (int_literal
-              (binary_literal))))
-        (uint_literal
-          (int_literal
-            (octal_literal)))))
+          (uint_literal)
+          (uint_literal))
+        (uint_literal)))
 
 ==================
 List expr
@@ -156,9 +307,7 @@ List expr
             (int_literal
               (decimal_literal))
             (identifier))
-          (uint_literal
-            (int_literal
-              (decimal_literal))))
+          (uint_literal))
         (int_literal
           (decimal_literal))))
 
@@ -188,9 +337,139 @@ Map expr
         (identifier)))
 
 ==================
+Unary not
+==================
+!a && !b
+---
+    (expr
+      (binary_expression
+        (unary_expression
+          (identifier))
+        (unary_expression
+          (identifier))))
+
+==================
+Unary minus
+==================
+-a + -b
+---
+    (expr
+      (binary_expression
+        (unary_expression
+          (identifier))
+        (unary_expression
+          (identifier))))
+
+==================
+Not equal
+==================
+a != b
+---
+    (expr
+      (binary_expression
+        (identifier)
+        (identifier)))
+
+==================
+Equality
+==================
+a == b
+---
+    (expr
+      (binary_expression
+        (identifier)
+        (identifier)))
+
+==================
+Relational operators
+==================
+a < b && c <= d && e > f && g >= h
+---
+    (expr
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (binary_expression
+              (identifier)
+              (identifier))
+            (binary_expression
+              (identifier)
+              (identifier)))
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (binary_expression
+          (identifier)
+          (identifier))))
+
+==================
+Parenthesized expression
+==================
+(a + b) * c
+---
+    (expr
+      (binary_expression
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (identifier)))
+
+==================
+Zero integer
+==================
+0
+---
+    (expr
+      (int_literal
+        (decimal_literal)))
+
+==================
+Hex literal
+==================
+0xFF
+---
+    (expr
+      (int_literal
+        (hex_literal)))
+
+==================
+Float with exponent
+==================
+1.5e10
+---
+    (expr
+      (float_literal))
+
+==================
+Float without integer part
+==================
+.5
+---
+    (expr
+      (float_literal))
+
+==================
+Float integer-only with exponent
+==================
+1e5
+---
+    (expr
+      (float_literal))
+
+==================
+Empty struct
+==================
+Foo{}
+---
+    (expr
+      (struct_expression
+        type: (identifier)))
+
+==================
 String literal
 ==================
-"a" + b'b' + br"c" + hello"d"
+"a" + r'b' + b"c" + br"d"
 ---
     (expr
       (binary_expression
@@ -199,11 +478,8 @@ String literal
             (string_literal
               (double_quote_string_literal))
             (string_literal
-              (identifier)
               (single_quoted_string_literal)))
-          (string_literal
-            (identifier)
-            (double_quote_string_literal)))
-        (string_literal
-          (identifier)
-          (double_quote_string_literal))))
+          (bytes_literal
+            (bytes_double_quote_literal)))
+        (bytes_literal
+          (bytes_double_quote_literal))))

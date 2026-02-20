@@ -81,6 +81,22 @@ map with URL strings
           (string_literal
             (double_quote_string_literal)))))
 ==================
+raw triple-quoted double-quote string
+==================
+r"""no \n escape processing "quoted" here"""
+---
+    (expr
+      (string_literal
+        (triple_double_quote_string_literal)))
+==================
+raw triple-quoted single-quote string
+==================
+r'''no \n escape processing 'quoted' here'''
+---
+    (expr
+      (string_literal
+        (triple_single_quoted_string_literal)))
+==================
 triple-quoted single strings with quotes
 ==================
 '''line with 'single' and "double" quotes'''
@@ -96,6 +112,36 @@ escape sequences in double-quoted strings
     (expr
       (string_literal
         (double_quote_string_literal)))
+==================
+raw double-quote string
+==================
+r"no \n escape here"
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal)))
+==================
+uppercase R prefix strings
+==================
+R"uppercase" + R'also uppercase'
+---
+    (expr
+      (binary_expression
+        (string_literal
+          (double_quote_string_literal))
+        (string_literal
+          (single_quoted_string_literal))))
+==================
+uppercase B prefix bytes
+==================
+B"uppercase bytes" + B'also bytes'
+---
+    (expr
+      (binary_expression
+        (bytes_literal
+          (bytes_double_quote_literal))
+        (bytes_literal
+          (bytes_single_quoted_literal))))
 ==================
 raw single-quoted string no escape processing
 ==================
@@ -158,9 +204,313 @@ b"bytes" + b'bytes'
 ---
     (expr
       (binary_expression
+        (bytes_literal
+          (bytes_double_quote_literal))
+        (bytes_literal
+          (bytes_single_quoted_literal))))
+==================
+in operator with map operand
+==================
+"key" in {"key": 1}
+---
+    (expr
+      (binary_expression
         (string_literal
-          (identifier)
           (double_quote_string_literal))
-        (string_literal
+        (map_expression
+          (map_entry
+            (string_literal
+              (double_quote_string_literal))
+            (int_literal
+              (decimal_literal))))))
+==================
+map with expression key
+==================
+{a + b: 1}
+---
+    (expr
+      (map_expression
+        (map_entry
+          key: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          value: (int_literal
+            (decimal_literal)))))
+==================
+struct with qualified type
+==================
+a.b{field: 1}
+---
+    (expr
+      (struct_expression
+        type: (select_expression
+          operand: (identifier)
+          member: (identifier))
+        fields: (struct_fields
+          (field_initializer
+            key: (identifier)
+            value: (int_literal
+              (decimal_literal))))))
+==================
+trailing comma in list
+==================
+[1, 2,]
+---
+    (expr
+      (list_expression
+        (int_literal
+          (decimal_literal))
+        (int_literal
+          (decimal_literal))))
+==================
+trailing comma in map
+==================
+{a: 1,}
+---
+    (expr
+      (map_expression
+        (map_entry
           (identifier)
+          (int_literal
+            (decimal_literal)))))
+==================
+trailing comma in struct fields
+==================
+Foo{a: 1,}
+---
+    (expr
+      (struct_expression
+        type: (identifier)
+        fields: (struct_fields
+          (field_initializer
+            key: (identifier)
+            value: (int_literal
+              (decimal_literal))))))
+==================
+trailing comma in arguments
+==================
+f(a, b,)
+---
+    (expr
+      (call_expression
+        function: (identifier)
+        arguments: (arguments
+          (identifier)
+          (identifier))))
+==================
+chained member calls
+==================
+x.map(y, y > 0).size()
+---
+    (expr
+      (member_call_expression
+        operand: (member_call_expression
+          operand: (identifier)
+          function: (identifier)
+          arguments: (arguments
+            (identifier)
+            (binary_expression
+              left: (identifier)
+              right: (int_literal
+                (decimal_literal)))))
+        function: (identifier)
+        arguments: (arguments)))
+==================
+has macro with field access
+==================
+has(x.y)
+---
+    (expr
+      (call_expression
+        function: (identifier)
+        arguments: (arguments
+          (select_expression
+            operand: (identifier)
+            member: (identifier)))))
+==================
+nested list
+==================
+[[1, 2], [3]]
+---
+    (expr
+      (list_expression
+        (list_expression
+          (int_literal
+            (decimal_literal))
+          (int_literal
+            (decimal_literal)))
+        (list_expression
+          (int_literal
+            (decimal_literal)))))
+==================
+unicode string
+==================
+'🎉😀' == '中文'
+---
+    (expr
+      (binary_expression
+        (string_literal
+          (single_quoted_string_literal))
+        (string_literal
           (single_quoted_string_literal))))
+==================
+empty list
+==================
+[]
+---
+    (expr
+      (list_expression))
+==================
+empty map
+==================
+{}
+---
+    (expr
+      (map_expression))
+==================
+select on parenthesized expression
+==================
+(a + b).c
+---
+    (expr
+      (select_expression
+        operand: (parenthesized_expression
+          (binary_expression
+            left: (identifier)
+            right: (identifier)))
+        member: (identifier)))
+==================
+index on parenthesized expression
+==================
+(a + b)[1]
+---
+    (expr
+      (index_expression
+        operand: (parenthesized_expression
+          (binary_expression
+            left: (identifier)
+            right: (identifier)))
+        index: (int_literal
+          (decimal_literal))))
+==================
+reserved keyword as struct field key
+==================
+Foo{as: 1, return: x}
+---
+    (expr
+      (struct_expression
+        type: (identifier)
+        fields: (struct_fields
+          (field_initializer
+            key: (reserved_keyword)
+            value: (int_literal
+              (decimal_literal)))
+          (field_initializer
+            key: (reserved_keyword)
+            value: (identifier)))))
+==================
+triple-quoted byte strings
+==================
+b"""bytes\nhere""" + b'''more\tbytes'''
+---
+    (expr
+      (binary_expression
+        (bytes_literal
+          (bytes_triple_double_quote_literal))
+        (bytes_literal
+          (bytes_triple_single_quoted_literal))))
+==================
+in keyword as standalone expression
+==================
+in
+---
+    (expr
+      (reserved_keyword))
+==================
+in keyword cannot be used as identifier
+==================
+in + 1
+---
+    (expr
+      (binary_expression
+        (reserved_keyword)
+        (int_literal
+          (decimal_literal))))
+==================
+raw bytes literal
+==================
+rb"raw\nbytes" + br'also\raw'
+---
+    (expr
+      (binary_expression
+        (bytes_literal
+          (bytes_double_quote_literal))
+        (bytes_literal
+          (bytes_single_quoted_literal))))
+==================
+float with uppercase exponent and negative exponent
+==================
+1E5 + 1.5e-10
+---
+    (expr
+      (binary_expression
+        (float_literal)
+        (float_literal)))
+==================
+multi-char escape sequences
+==================
+"\xFF\u0041\U00000041\012"
+---
+    (expr
+      (string_literal
+        (double_quote_string_literal)))
+==================
+line comment only
+==================
+42 // a comment
+---
+    (expr
+      (int_literal
+        (decimal_literal))
+      (comment))
+==================
+whitespace inside decimal literal is an error
+==================
+1 2
+---
+    (expr
+      (ERROR
+        (int_literal
+          (decimal_literal)))
+      (int_literal
+        (decimal_literal)))
+==================
+whitespace inside hex literal is an error
+==================
+0 xAB
+---
+    (expr
+      (ERROR
+        (int_literal
+          (decimal_literal)))
+      (identifier))
+==================
+whitespace before uint suffix is an error
+==================
+1 u
+---
+    (expr
+      (ERROR
+        (int_literal
+          (decimal_literal)))
+      (identifier))
+==================
+reserved keyword cannot be used as function name
+==================
+as(x)
+---
+    (expr
+      (ERROR
+        (reserved_keyword))
+      (parenthesized_expression
+        (identifier)))
