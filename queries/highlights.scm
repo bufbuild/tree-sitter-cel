@@ -47,7 +47,7 @@
 ; Keywords
 "in" @keyword.operator
 
-(reserved_keyword) @keyword.reserved
+(reserved_keyword) @keyword
 
 ; Function calls
 (call_expression
