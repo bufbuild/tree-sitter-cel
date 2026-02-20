@@ -21,10 +21,14 @@
 ; Ternary operator
 "?" @operator
 
-(conditional_expression ":" @operator)
+(conditional_expression
+  ":" @operator)
 
-(map_entry ":" @punctuation.delimiter)
-(field_initializer ":" @punctuation.delimiter)
+(map_entry
+  ":" @punctuation.delimiter)
+
+(field_initializer
+  ":" @punctuation.delimiter)
 
 ; Punctuation
 [
@@ -54,11 +58,17 @@
   arguments: (arguments))
 
 (member_call_expression
-  function: [(identifier) (reserved_keyword)] @function.method.call)
+  function: [
+    (identifier)
+    (reserved_keyword)
+  ] @function.method.call)
 
 ; Member access
 (select_expression
-  member: [(identifier) (reserved_keyword)] @variable.member)
+  member: [
+    (identifier)
+    (reserved_keyword)
+  ] @variable.member)
 
 ; Variables
 (identifier) @variable
