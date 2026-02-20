@@ -11,35 +11,72 @@
   "+"
   "<"
   "<="
+  "!="
   "=="
   ">"
   ">="
   "||"
 ] @operator
 
+; Ternary operator
+"?" @operator
+
+(conditional_expression
+  ":" @operator)
+
+(map_entry
+  ":" @punctuation.delimiter)
+
+(field_initializer
+  ":" @punctuation.delimiter)
+
+; Punctuation
+[
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
+
+"," @punctuation.delimiter
+
+"." @punctuation.delimiter
+
 ; Keywords
-"in" @keyword
+"in" @keyword.operator
+
+(reserved_keyword) @keyword.reserved
 
 ; Function calls
 (call_expression
   function: (identifier) @function.call)
 
+(absolute_expression
+  name: (identifier) @function.call
+  arguments: (arguments))
+
 (member_call_expression
-  function: (identifier) @function.method.call)
+  function: [
+    (identifier)
+    (reserved_keyword)
+  ] @function.method.call)
 
 ; Member access
 (select_expression
-  member: (identifier) @variable.member)
+  member: [
+    (identifier)
+    (reserved_keyword)
+  ] @variable.member)
 
 ; Variables
 (identifier) @variable
 
 ; Literals
 [
-  (double_quote_string_literal)
-  (single_quoted_string_literal)
-  (triple_double_quote_string_literal)
-  (triple_single_quoted_string_literal)
+  (string_literal)
+  (bytes_literal)
 ] @string
 
 [
