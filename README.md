@@ -13,3 +13,9 @@ This repo contains a tree-sitter version of the [CEL grammar](https://github.com
 ## References
 
 - [cel-spec](https://github.com/google/cel-spec)
+
+## Legal
+
+Offered under the [Apache 2 license][license].
+
+[license]: https://github.com/bufbuild/tree-sitter-cel/blob/main/LICENSE
