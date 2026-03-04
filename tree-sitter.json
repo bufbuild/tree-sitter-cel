@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
   "grammars": [
     {
       "name": "cel",
@@ -8,10 +9,7 @@
       "file-types": [
         "cel"
       ],
-      "injection-regex": "^cel$",
       "highlights": "queries/highlights.scm",
-      "folds": "queries/folds.scm",
-      "indents": "queries/indents.scm",
       "injections": "queries/injections.scm",
       "locals": "queries/locals.scm"
     }
